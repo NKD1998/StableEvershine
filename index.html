@@ -91,7 +91,7 @@
 <meta name="ext-resource-dependency" content="assets/hero-tower-night.jpg">
 <meta name="ext-resource-dependency" content="assets/maharera-qr.png">
 <meta name="ext-resource-dependency" content="assets/tower-day.jpg">
-<meta name="ext-resource-dependency" content="assets/hero-video.mp4?v=2">
+<meta name="ext-resource-dependency" content="assets/hero-video.mp4?v=3">
 <style>
   *{box-sizing:border-box}
   html{scroll-behavior:smooth}
@@ -494,7 +494,15 @@
               <p style="margin:18px 0 0;font-size:clamp(15px,1.3vw,17px);line-height:1.8;color:var(--se-slate);font-weight:400">{{ sec.p }}</p>
             </div>
             <div class="reveal d1" data-tilt="4" style="{{ sec.imgWrap }}">
-              <img class="reveal-mask" data-src="{{ sec.img }}" loading="lazy" alt="{{ sec.h }}" style="{{ sec.imgStyle }}" style-hover="transform:scale(1.04)"/>
+              <sc-if value="{{ sec.hasImg }}" hint-placeholder-val="{{ true }}">
+                <img class="reveal-mask" data-src="{{ sec.img }}" loading="lazy" alt="{{ sec.h }}" style="{{ sec.imgStyle }}" style-hover="transform:scale(1.04)"/>
+              </sc-if>
+              <sc-if value="{{ sec.noImg }}" hint-placeholder-val="{{ false }}">
+                <div style="{{ sec.phStyle }}">
+                  <span style="font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--se-slate);font-weight:600">Photo coming soon</span>
+                  <span style="font-size:13px;color:var(--se-slate);opacity:.7">{{ sec.h }}</span>
+                </div>
+              </sc-if>
             </div>
           </div>
         </sc-for>
@@ -1024,7 +1032,7 @@
     <!-- sun core -->
     <div data-parallax="0.06" aria-hidden="true" style="position:absolute;left:var(--se-sun-x,28%);top:5%;width:min(40vw,440px);height:min(40vw,440px);transform:translate(-50%,-50%);border-radius:9999px;background:radial-gradient(circle, rgba(255,253,248,1) 0%, rgba(255,241,208,.92) 24%, rgba(252,226,162,.45) 46%, rgba(248,215,138,0) 72%);animation:seSunPulse 9s ease-in-out infinite;pointer-events:none;will-change:transform,opacity"></div>
     <!-- hero background video -->
-    <video id="se-hero-video" autoplay muted loop playsinline preload="auto" tabindex="-1" aria-hidden="true" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center center;z-index:0;transform:scale(1.04);transform-origin:50% 50%"><source src="assets/hero-video.mp4?v=2" type="video/mp4"/></video>
+    <video id="se-hero-video" autoplay muted loop playsinline preload="auto" tabindex="-1" aria-hidden="true" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center center;z-index:0;transform:scale(1.04);transform-origin:50% 50%"><source src="assets/hero-video.mp4?v=3" type="video/mp4"/></video>
     <!-- light text-legibility scrim: warm wash at top (behind nav) and bottom-left (behind hero copy) so dark text stays readable over dark video frames -->
     <div aria-hidden="true" style="position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(16,14,10,.62) 0%,rgba(16,14,10,.3) 12%,transparent 26%),linear-gradient(180deg,transparent 0%,transparent 28%,rgba(16,14,10,.5) 70%,rgba(12,10,7,.74) 100%),radial-gradient(120% 92% at 22% 92%, rgba(12,10,7,.72) 0%, rgba(12,10,7,.36) 42%, transparent 68%);pointer-events:none"></div>
 
@@ -2143,7 +2151,9 @@ class Component extends DCLogic {
         intro:'Meet the visionaries shaping Stable Evershine\u2019s legacy — leaders committed to thoughtful development, uncompromising quality, and homes built to stand the test of time.',
         stats:[{k:'60+',v:'Years of group legacy'},{k:'15+',v:'Years of Stable Evershine'},{k:'10M+',v:'Sq. ft. developed'},{k:'1,000+',v:'Families served'}],
         sections:[
-          {img:'assets/santosh-ludhani.png?v=2', fit:'contain', bg:'#F4F1EB', pos:'center', h:'Santosh Ludhani', sub:'Director, Stable Evershine', p:'Carrying forward a distinguished real estate legacy, Santosh Ludhani leads Stable Evershine Builders with a clear vision rooted in trust, thoughtful development, and enduring quality. As a third-generation entrepreneur, he is committed to creating homes that reflect intelligent planning, meticulous execution, and long-term value. His approach combines the strength of the Evershine legacy with a contemporary perspective on residential development, ensuring every project is designed to meet the evolving aspirations of modern homebuyers while upholding the principles that have defined the group\u2019s reputation for decades.'}
+          {img:'assets/santosh-ludhani.png?v=3', fit:'contain', bg:'#F4F1EB', pos:'center', h:'Santosh Ludhani', sub:'Director, Stable Evershine', p:'Carrying forward a distinguished real estate legacy, Santosh Ludhani leads Stable Evershine Builders with a clear vision rooted in trust, thoughtful development, and enduring quality. As a third-generation entrepreneur, he is committed to creating homes that reflect intelligent planning, meticulous execution, and long-term value. His approach combines the strength of the Evershine legacy with a contemporary perspective on residential development, ensuring every project is designed to meet the evolving aspirations of modern homebuyers while upholding the principles that have defined the group\u2019s reputation for decades.'},
+          {img:'', fit:'cover', bg:'#F4F1EB', pos:'center', h:'Rajkumar Ramchand Ludhani', sub:'Director', p:'With over three decades of experience in real estate, he has been a driving force behind the Evershine legacy. Guided by integrity, quality, and a customer-first approach, he has played a pivotal role in creating developments that inspire trust and deliver lasting value.'},
+          {img:'', fit:'cover', bg:'#F4F1EB', pos:'center', h:'Rachna Kishinchand Ludhani', sub:'Director', p:'She brings a thoughtful and progressive approach to the group\u2019s leadership, contributing to its strategic direction and governance. Her commitment to quality, innovation, and customer-focused development continues to support the creation of thoughtfully designed residential communities.'}
         ]
       },
       mission: {
@@ -2540,7 +2550,8 @@ class Component extends DCLogic {
     const pageSections = (page.sections || []).map((s, i) => {
       const flip = i % 2 === 1;
       return {
-        h:s.h, sub:s.sub || '', hasSub: !!s.sub, p:s.p, img:s.img,
+        h:s.h, sub:s.sub || '', hasSub: !!s.sub, p:s.p, img:s.img, hasImg: !!s.img, noImg: !s.img,
+        phStyle:{ width:'100%', height:'clamp(260px,30vw,380px)', background: s.bg || '#F4F1EB', borderRadius:'10px', border:'1px dashed rgba(11,19,37,.22)', display:'flex', alignItems:'center', justifyContent:'center', flexDirection:'column', gap:'10px', boxShadow:'0 44px 80px -50px rgba(11,19,37,.5)' },
         rowStyle:{ display:'flex', flexDirection: flip ? 'row-reverse' : 'row', flexWrap:'wrap', gap:'clamp(24px,4vw,60px)', alignItems:'center', borderTop:'1px solid rgba(11,19,37,.08)', paddingTop:'clamp(30px,4vw,52px)' },
         textWrap:{ flex:'1 1 320px', minWidth:'280px' },
         imgWrap:{ flex:'1 1 380px', minWidth:'280px', position:'relative', transformStyle:'preserve-3d' },
